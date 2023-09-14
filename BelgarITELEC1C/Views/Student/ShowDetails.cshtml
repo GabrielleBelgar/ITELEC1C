@@ -1,0 +1,52 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Student;
+
+<h1>Student Details</h1>
+
+<table class="table table-info">
+    <tr>
+        <th>Student Id</th>
+        <td>@Model.StudentId</td>
+    </tr>
+
+    <tr>
+        <th>Last Name</th>
+        <td>@Model.StudentLastName</td>
+    </tr>
+
+    <tr>
+        <th>First Name</th>
+        <td>@Model.StudentFirstName</td>
+    </tr>
+
+    <tr>
+        <th>Course</th>
+        <td>@Model.StudentCourse</td>
+    </tr>
+
+    <tr>
+        <th>Email</th>
+        <td>@Model.StudentEmail</td>
+    </tr>
+
+    <tr>
+        <th>Date Enrolled</th>
+        <td>@Model.DateEnrolled</td>
+    </tr>
+
+    <tr>
+        <th>GPA</th>
+        <td>@Model.GPA</td>
+    </tr>
+
+
+    </tr>
+
+
+</table>
+
+<a asp-action="index">Return to Index page</a>

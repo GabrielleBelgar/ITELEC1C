@@ -1,0 +1,39 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1>Student List</h1>
+<br />
+<a class="btn btn-primary" asp-action="AddStudent">Add Student</a>
+<br />
+<br />
+
+
+<table class="table">
+    <tr class="table-primary">
+        <td>Name</td>
+        <td>Course</td>
+        <td>Date Enrolled</td>
+        <td>Email</td>
+        <td>GPA</td>
+        <td>Show Details</td>
+
+
+    </tr>
+
+    @foreach (var student in Model)
+    {
+        <tr>
+            <td>@student.StudentName</td>
+            <td>@student.StudentCourse</td>
+            <td>@student.DateEnrolled</td>
+            <td>@student.StudentEmail</td>
+            <td>@student.GPA</td>
+            <td><a class="btn btn-primary" asp-action="ShowDetails" asp-route-id="@student.StudentId">Show Details</a></td>
+        </tr>
+
+    }
+
+</table>
