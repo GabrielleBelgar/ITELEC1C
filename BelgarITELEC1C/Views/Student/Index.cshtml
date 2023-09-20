@@ -19,6 +19,7 @@
         <td>Email</td>
         <td>GPA</td>
         <td>Show Details</td>
+        <td>Update</td>
 
 
     </tr>
@@ -26,12 +27,13 @@
     @foreach (var student in Model)
     {
         <tr>
-            <td>@student.StudentName</td>
+            <td>@student.StudentFirstName @student.StudentLastName</td>
             <td>@student.StudentCourse</td>
             <td>@student.DateEnrolled</td>
             <td>@student.StudentEmail</td>
             <td>@student.GPA</td>
             <td><a class="btn btn-primary" asp-action="ShowDetails" asp-route-id="@student.StudentId">Show Details</a></td>
+            <td><a class="btn btn-primary" asp-action="UpdateStudent" asp-route-id="@student.StudentId">Update</a></td>
         </tr>
 
     }

@@ -105,6 +105,37 @@ namespace BelgarITELEC1C.Controllers
 
             return NotFound();
         }
+
+        [HttpGet]
+        public IActionResult UpdateStudent(int id)
+        {
+            Student? student = StudentList.FirstOrDefault(st => st.StudentId == id);
+
+            if (student != null)
+                return View(student);
+
+
+
+            return NotFound();
+        }
+
+
+        [HttpPost]
+        public IActionResult UpdateStudent(Student studentChanges)
+        {
+            Student? student = StudentList.FirstOrDefault(st => st.StudentId == studentChanges.StudentId);
+            if (student != null)
+            {
+                student.StudentFirstName = studentChanges.StudentFirstName;
+                student.StudentLastName = studentChanges.StudentLastName;
+                student.StudentEmail = studentChanges.StudentEmail;
+                student.StudentCourse = studentChanges.StudentCourse;
+                student.GPA = studentChanges.GPA;
+                student.DateEnrolled = studentChanges.DateEnrolled;
+
+            }
+            return View("Index", StudentList);
+        }
     }
 }
 

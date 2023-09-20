@@ -88,6 +88,39 @@ namespace BelgarITELEC1C.Controllers
             
             return NotFound();
         }
+
+
+        [HttpGet]
+        public IActionResult UpdateInstructor(int id)
+        {
+            Instructor? instructor = InstructorList.FirstOrDefault(st => st.InstructorId == id);
+
+            if (instructor != null)
+                return View(instructor);
+
+
+
+            return NotFound();
+        }
+
+
+        [HttpPost]
+        public IActionResult UpdateInstructor(Instructor instructorChanges)
+        {
+            Instructor? instructor = InstructorList.FirstOrDefault(st => st.InstructorId == instructorChanges.InstructorId);
+            if (instructor != null)
+            {
+                instructor.InstructorFirstName = instructorChanges.InstructorFirstName;
+                instructor.InstructorLastName = instructorChanges.InstructorLastName;
+                instructor.InstructorEmail = instructorChanges.InstructorEmail;
+                instructor.DateHired = instructorChanges.DateHired;
+                instructor.IsTenured = instructorChanges.IsTenured;
+                instructor.Rank = instructorChanges.Rank;
+
+            }
+            return View("Index", InstructorList);
+        }
+
     }
 }
 

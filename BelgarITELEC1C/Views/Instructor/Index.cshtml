@@ -17,17 +17,19 @@
         <td>Email</td>
         <td>Rank</td>
         <td>Details</td>
+        <td>Update</td>
         
     </tr>
 
     @foreach(var instructor in Model)
     {
         <tr>
-        <td>@instructor.InstructorName</td>
+        <td>@instructor.InstructorFirstName @instructor.InstructorLastName</td>
         <td>@instructor.DateHired</td>
         <td>@instructor.InstructorEmail</td>
         <td>@instructor.Rank</td>
         <td><a class="btn btn-primary" asp-action="ShowDetails" asp-route-id="@instructor.InstructorId">Show Details</a></td>
+        <td><a class="btn btn-primary" asp-action="UpdateInstructor" asp-route-id="@instructor.InstructorId">Update</a></td>
         </tr>
 
     }
