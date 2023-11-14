@@ -1,65 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BelgarITELEC1C.Models;
+using BelgarITELEC1C.Services;
 
 namespace BelgarITELEC1C.Controllers
 {
     public class InstructorController : Controller
     {
-        List<Instructor> InstructorList = new List<Instructor>()
-            {
-                new Instructor()
+        private readonly IMyFakeDataService _dummyData;
+
+        public InstructorController(IMyFakeDataService dummyData)
         {
-            InstructorId = 1,
-            InstructorName = "Gabriel Montano",
-            InstructorFirstName = "Gabriel",
-            InstructorLastName ="Montano",
-                    DateHired = DateTime.Now,
-                    InstructorEmail = "gdmontano@ust.edu.ph",
-                    IsTenured = IsTenured.Permanent,
-                    Rank = Rank.Instructor
-                },
+            _dummyData = dummyData;
+        }
 
-
-        new Instructor()
-        {
-            InstructorId = 2,
-            InstructorName = "Eugenia Zhuo",
-            InstructorFirstName = "Eugenia",
-            InstructorLastName = "Zhuo",
-                    DateHired = DateTime.Parse("25/3/2000"),
-                    InstructorEmail = "erzhuo@ust.edu.ph",
-                    IsTenured = IsTenured.Permanent,
-                    Rank = Rank.AssistantProfessor
-                },
-
-          new Instructor()
-        {
-            InstructorId = 3,
-            InstructorName = "Leo Lintag",
-            InstructorFirstName = "Leo",
-            InstructorLastName = "Lintag",
-                    DateHired = DateTime.Parse("25/3/2001"),
-                    InstructorEmail = "Lintag@ust.edu.ph",
-                    IsTenured = IsTenured.Permanent,
-                    Rank = Rank.AssociateProfessor
-                },
-
-           new Instructor()
-        {
-            InstructorId = 4,
-            InstructorName = "Beatriz Lacsamana",
-            InstructorFirstName = "Beatriz",
-            InstructorLastName = "Lacsamana",
-                    DateHired = DateTime.Parse("25/4/2002"),
-                    InstructorEmail = "mllacsamana@ust.edu.ph",
-                    IsTenured = IsTenured.Probationary,
-                    Rank = Rank.Professor
-                },
-
-    };
         public IActionResult Index()
         {
-            return View(InstructorList);
+            return View(_dummyData.InstructorList);
         }
 
         [HttpGet]
@@ -71,15 +27,15 @@ namespace BelgarITELEC1C.Controllers
         [HttpPost]
         public IActionResult AddInstructor(Instructor newInstructor)
         {
-            InstructorList.Add(newInstructor);
-            return View("Index", InstructorList);
+            _dummyData.InstructorList.Add(newInstructor);
+            return RedirectToAction("Index");
         }
 
 
         public IActionResult ShowDetails(int id)
         {
 
-            Instructor? instructor = InstructorList.FirstOrDefault(st => st.InstructorId == id);
+            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.InstructorId == id);
 
             if (instructor != null)
              return View(instructor);
@@ -93,7 +49,7 @@ namespace BelgarITELEC1C.Controllers
         [HttpGet]
         public IActionResult UpdateInstructor(int id)
         {
-            Instructor? instructor = InstructorList.FirstOrDefault(st => st.InstructorId == id);
+            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.InstructorId == id);
 
             if (instructor != null)
                 return View(instructor);
@@ -107,7 +63,7 @@ namespace BelgarITELEC1C.Controllers
         [HttpPost]
         public IActionResult UpdateInstructor(Instructor instructorChanges)
         {
-            Instructor? instructor = InstructorList.FirstOrDefault(st => st.InstructorId == instructorChanges.InstructorId);
+            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.InstructorId == instructorChanges.InstructorId);
             if (instructor != null)
             {
                 instructor.InstructorFirstName = instructorChanges.InstructorFirstName;
@@ -118,7 +74,31 @@ namespace BelgarITELEC1C.Controllers
                 instructor.Rank = instructorChanges.Rank;
 
             }
-            return View("Index", InstructorList);
+            return RedirectToAction("Index");
+        }
+
+
+
+        [HttpGet]
+        public IActionResult DeleteInstructor(int id)
+        {
+
+            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.InstructorId == id);
+            if (instructor != null)
+                return View(instructor);    
+
+            return NotFound();
+        }
+
+
+        [HttpPost]
+        public IActionResult DeleteInstructor(Instructor newInstructor)
+        {
+            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.InstructorId == newInstructor.InstructorId);
+
+            if (instructor != null)
+                _dummyData.InstructorList.Remove(instructor);
+            return RedirectToAction("Index");
         }
 
     }

@@ -18,6 +18,7 @@
         <td>Rank</td>
         <td>Details</td>
         <td>Update</td>
+        <td>Delete</td>
         
     </tr>
 
@@ -30,6 +31,8 @@
         <td>@instructor.Rank</td>
         <td><a class="btn btn-primary" asp-action="ShowDetails" asp-route-id="@instructor.InstructorId">Show Details</a></td>
         <td><a class="btn btn-primary" asp-action="UpdateInstructor" asp-route-id="@instructor.InstructorId">Update</a></td>
+        <td><a class="btn btn-danger" asp-action="DeleteInstructor" asp-route-id="@instructor.InstructorId">Delete</a></td>
+
         </tr>
 
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BelgarITELEC1C.Models;
+using BelgarITELEC1C.Services;
 
 namespace BelgarITELEC1C.Controllers
 {
@@ -22,63 +23,17 @@ namespace BelgarITELEC1C.Controllers
 
     public class StudentController : Controller
     {
-        List<Student> StudentList = new List<Student>()
-            {
-                new Student()
+        private readonly IMyFakeDataService _dummyData;
+
+        public StudentController(IMyFakeDataService dummyData)
         {
-            StudentId = 1,
-            StudentName = "Gabrielle Joanna Marie Belgar",
-            StudentFirstName = "Gabrielle Joanna Marie",
-            StudentLastName ="Belgar",
-            StudentCourse = StudentCourse.BSIT,
-            DateEnrolled = DateTime.Now,
-            StudentEmail = "gabriellejoanna.belgar.cics@ust.edu.ph",
-            GPA = 1
-                },
+            _dummyData = dummyData;
+        }
 
 
-                new Student()
-        {
-            StudentId = 2,
-            StudentName = "Charlene Arlante",
-            StudentFirstName = "Charlene",
-            StudentLastName ="Arlante",
-            StudentCourse = StudentCourse.BSCS,
-            DateEnrolled = DateTime.Parse("09/08/2023"),
-            StudentEmail = "charlene.arlante.cics@ust.edu.ph",
-            GPA = 1.25
-                },
-
-
-                new Student()
-        {
-            StudentId = 3,
-            StudentName = "Roxanne Debil",
-            StudentFirstName = "Roxanne",
-            StudentLastName ="Debil",
-            StudentCourse = StudentCourse.BSIS,
-            DateEnrolled = DateTime.Parse("10/07/2023"),
-            StudentEmail = "roxanne.debil.cics@ust.edu.ph",
-            GPA = 1.50
-                },
-
-
-                new Student()
-        {
-            StudentId = 4,
-            StudentName = "Yvonne Girao",
-            StudentFirstName = "Yvonne",
-            StudentLastName ="Girao",
-            StudentCourse = StudentCourse.BSIT,
-            DateEnrolled = DateTime.Parse("05/06/2023"),
-            StudentEmail = "yvonne.girao.cics@ust.edu.ph",
-            GPA = 1.75
-                },
-
-    };
         public IActionResult Index()
         {
-            return View(StudentList);
+            return View(_dummyData.StudentList);
         }
 
         [HttpGet]
@@ -90,13 +45,14 @@ namespace BelgarITELEC1C.Controllers
         [HttpPost]
         public IActionResult AddStudent(Student newStudent)
         {
-            StudentList.Add(newStudent);
-            return View("Index", StudentList);
+            _dummyData.StudentList.Add(newStudent);
+            return RedirectToAction("Index");
+
         }
         public IActionResult ShowDetails(int id)
         {
 
-            Student? student = StudentList.FirstOrDefault(st => st.StudentId == id);
+            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.StudentId == id);
 
             if (student != null)
                 return View(student);
@@ -109,7 +65,7 @@ namespace BelgarITELEC1C.Controllers
         [HttpGet]
         public IActionResult UpdateStudent(int id)
         {
-            Student? student = StudentList.FirstOrDefault(st => st.StudentId == id);
+            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.StudentId == id);
 
             if (student != null)
                 return View(student);
@@ -123,7 +79,7 @@ namespace BelgarITELEC1C.Controllers
         [HttpPost]
         public IActionResult UpdateStudent(Student studentChanges)
         {
-            Student? student = StudentList.FirstOrDefault(st => st.StudentId == studentChanges.StudentId);
+            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.StudentId == studentChanges.StudentId);
             if (student != null)
             {
                 student.StudentFirstName = studentChanges.StudentFirstName;
@@ -134,8 +90,34 @@ namespace BelgarITELEC1C.Controllers
                 student.DateEnrolled = studentChanges.DateEnrolled;
 
             }
-            return View("Index", StudentList);
+            return RedirectToAction("Index");
         }
+
+
+        [HttpGet]
+        public IActionResult DeleteStudent(int id)
+        {
+            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.StudentId == id);
+
+            if (student != null)
+                return View(student);
+
+
+
+            return NotFound();
+        }
+
+
+        [HttpPost]
+        public IActionResult DeleteStudent(Student newStudent)
+        {
+            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.StudentId == newStudent.StudentId);
+
+            if (student != null)
+                _dummyData.StudentList.Remove(student);
+            return RedirectToAction("Index");
+        }
+
     }
 }
 
