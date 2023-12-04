@@ -1,21 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BelgarITELEC1C.Models;
-using BelgarITELEC1C.Services;
+using BelgarITELEC1C.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BelgarITELEC1C.Controllers
 {
     public class InstructorController : Controller
     {
-        private readonly IMyFakeDataService _dummyData;
-
-        public InstructorController(IMyFakeDataService dummyData)
+        private readonly AppDbContext _dbData;
+        private readonly IWebHostEnvironment _environment;
+        public InstructorController(AppDbContext dbData, IWebHostEnvironment environment)
         {
-            _dummyData = dummyData;
+            _dbData = dbData;
+            _environment = environment;
         }
 
+
+        [Authorize]
         public IActionResult Index()
         {
-            return View(_dummyData.InstructorList);
+            return View(_dbData.Instructors);
         }
 
         [HttpGet]
@@ -27,7 +31,25 @@ namespace BelgarITELEC1C.Controllers
         [HttpPost]
         public IActionResult AddInstructor(Instructor newInstructor)
         {
-            _dummyData.InstructorList.Add(newInstructor);
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            if (Request.Form.Files.Count > 0)
+            {
+                var file = Request.Form.Files[0];
+
+                MemoryStream ms = new MemoryStream();
+                file.CopyTo(ms);
+                newInstructor.InstructorProfilePhoto = ms.ToArray();
+
+                ms.Close();
+                ms.Dispose();
+            }
+
+
+            _dbData.Instructors.Add(newInstructor);
+            _dbData.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -35,13 +57,22 @@ namespace BelgarITELEC1C.Controllers
         public IActionResult ShowDetails(int id)
         {
 
-            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.InstructorId == id);
+            Instructor? instructor = _dbData.Instructors.FirstOrDefault(st => st.InstructorId == id);
+
 
             if (instructor != null)
-             return View(instructor);
+            {
+                if (instructor.InstructorProfilePhoto != null)
+                {
+                    string imageBase64Data = Convert.ToBase64String(instructor.InstructorProfilePhoto);
+                    string imageDataURL = string.Format("data:image/jpg;base64, {0}", imageBase64Data);
+                    ViewBag.InstructorProfilePhoto = imageDataURL;
+                }
+                return View(instructor);
+            }
 
-            
-            
+
+
             return NotFound();
         }
 
@@ -49,7 +80,7 @@ namespace BelgarITELEC1C.Controllers
         [HttpGet]
         public IActionResult UpdateInstructor(int id)
         {
-            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.InstructorId == id);
+            Instructor? instructor = _dbData.Instructors.FirstOrDefault(st => st.InstructorId == id);
 
             if (instructor != null)
                 return View(instructor);
@@ -63,7 +94,7 @@ namespace BelgarITELEC1C.Controllers
         [HttpPost]
         public IActionResult UpdateInstructor(Instructor instructorChanges)
         {
-            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.InstructorId == instructorChanges.InstructorId);
+            Instructor? instructor = _dbData.Instructors.FirstOrDefault(st => st.InstructorId == instructorChanges.InstructorId);
             if (instructor != null)
             {
                 instructor.InstructorFirstName = instructorChanges.InstructorFirstName;
@@ -72,6 +103,8 @@ namespace BelgarITELEC1C.Controllers
                 instructor.DateHired = instructorChanges.DateHired;
                 instructor.IsTenured = instructorChanges.IsTenured;
                 instructor.Rank = instructorChanges.Rank;
+                _dbData.SaveChanges();
+
 
             }
             return RedirectToAction("Index");
@@ -83,7 +116,7 @@ namespace BelgarITELEC1C.Controllers
         public IActionResult DeleteInstructor(int id)
         {
 
-            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.InstructorId == id);
+            Instructor? instructor = _dbData.Instructors.FirstOrDefault(st => st.InstructorId == id);
             if (instructor != null)
                 return View(instructor);    
 
@@ -94,10 +127,12 @@ namespace BelgarITELEC1C.Controllers
         [HttpPost]
         public IActionResult DeleteInstructor(Instructor newInstructor)
         {
-            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.InstructorId == newInstructor.InstructorId);
+            Instructor? instructor = _dbData.Instructors.FirstOrDefault(st => st.InstructorId == newInstructor.InstructorId);
 
             if (instructor != null)
-                _dummyData.InstructorList.Remove(instructor);
+                _dbData.Instructors.Remove(instructor);
+                _dbData.SaveChanges();
+
             return RedirectToAction("Index");
         }
 

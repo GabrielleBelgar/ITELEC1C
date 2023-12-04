@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "SxX7vw7bI7xCHNYhEmx5HHCaqx7J+Hr9RGpH8ZVfKfI=",
+  "Hash": "mJWG1HYJsrxWu3qpqTDBi4ZiG0AHGEIA9kUcClRd2hA=",
   "Source": "BelgarITELEC1C",
   "BasePath": "_content/BelgarITELEC1C",
   "Mode": "Default",
@@ -2106,6 +2106,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\Gabrielle\\source\\repos\\BelgarITELEC1C\\BelgarITELEC1C\\wwwroot\\students\\images\\94d3e0ac-3b32-4eab-949c-7157a53bef35_2x2.png",
+      "SourceId": "BelgarITELEC1C",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Gabrielle\\source\\repos\\BelgarITELEC1C\\BelgarITELEC1C\\wwwroot\\",
+      "BasePath": "_content/BelgarITELEC1C",
+      "RelativePath": "students/images/94d3e0ac-3b32-4eab-949c-7157a53bef35_2x2.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\students\\images\\94d3e0ac-3b32-4eab-949c-7157a53bef35_2x2.png"
+    },
+    {
+      "Identity": "C:\\Users\\Gabrielle\\source\\repos\\BelgarITELEC1C\\BelgarITELEC1C\\wwwroot\\students\\images\\ac34e8e7-9abd-4d55-b423-8e90b7540acc_2x2.png",
+      "SourceId": "BelgarITELEC1C",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Gabrielle\\source\\repos\\BelgarITELEC1C\\BelgarITELEC1C\\wwwroot\\",
+      "BasePath": "_content/BelgarITELEC1C",
+      "RelativePath": "students/images/ac34e8e7-9abd-4d55-b423-8e90b7540acc_2x2.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\students\\images\\ac34e8e7-9abd-4d55-b423-8e90b7540acc_2x2.png"
     }
   ]
 }

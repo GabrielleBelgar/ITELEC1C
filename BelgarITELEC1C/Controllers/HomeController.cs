@@ -1,8 +1,9 @@
 ﻿using BelgarITELEC1C.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace BelgarITELEC1C.Controllers
+namespace BelgarITELEC.Controllers
 {
     public class HomeController : Controller
     {
@@ -12,7 +13,6 @@ namespace BelgarITELEC1C.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return View();

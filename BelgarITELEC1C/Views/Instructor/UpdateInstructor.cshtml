@@ -6,6 +6,7 @@
 @model Instructor;
 
 <h1>Update Instructor</h1>
+<div asp-validation-summary="All" class="text-danger"></div>
 
     <form asp-action="UpdateInstructor" asp-controller="Instructor" method="post">
 
@@ -28,6 +29,11 @@
     <div class="form-group">
         <label asp-for="InstructorEmail">Instructor Email</label>
         <input class="form-control" asp-for="InstructorEmail" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Phone"></label>
+        <input class="form-control" asp-for="Phone" />
     </div>
 
     <div class="form-group">

@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using BelgarITELEC1C.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace BelgarITELEC1C.Data
 {
 
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User>
     {
         public DbSet<Student> Students { get; set; }
         public DbSet<Instructor> Instructors { get; set; }
@@ -23,7 +24,6 @@ namespace BelgarITELEC1C.Data
                 new Student()
                 {
                     StudentId = 1,
-                    StudentName = "Gabrielle Joanna Marie Belgar",
                     StudentFirstName = "Gabrielle Joanna Marie",
                     StudentLastName = "Belgar",
                     StudentCourse = StudentCourse.BSIT,
@@ -36,7 +36,6 @@ namespace BelgarITELEC1C.Data
                 new Student()
                 {
                     StudentId = 2,
-                    StudentName = "Charlene Arlante",
                     StudentFirstName = "Charlene",
                     StudentLastName = "Arlante",
                     StudentCourse = StudentCourse.BSCS,
@@ -49,7 +48,6 @@ namespace BelgarITELEC1C.Data
                 new Student()
                 {
                     StudentId = 3,
-                    StudentName = "Roxanne Debil",
                     StudentFirstName = "Roxanne",
                     StudentLastName = "Debil",
                     StudentCourse = StudentCourse.BSIS,
@@ -62,7 +60,6 @@ namespace BelgarITELEC1C.Data
                 new Student()
                 {
                     StudentId = 4,
-                    StudentName = "Yvonne Girao",
                     StudentFirstName = "Yvonne",
                     StudentLastName = "Girao",
                     StudentCourse = StudentCourse.BSIT,
@@ -70,6 +67,58 @@ namespace BelgarITELEC1C.Data
                     StudentEmail = "yvonne.girao.cics@ust.edu.ph",
                     GPA = 1.75
                 });
+
+
+            modelBuilder.Entity<Instructor>().HasData(
+
+                 new Instructor()
+                 {
+                     InstructorId = 1,
+                     InstructorFirstName = "Gabriel",
+                     InstructorLastName = "Montano",
+                     DateHired = DateTime.Now,
+                     InstructorEmail = "gdmontano@ust.edu.ph",
+                     IsTenured = IsTenured.Permanent,
+                     Rank = Rank.Instructor
+                 },
+
+
+                new Instructor()
+                {
+                    InstructorId = 2,
+                    InstructorFirstName = "Eugenia",
+                    InstructorLastName = "Zhuo",
+                    DateHired = DateTime.Parse("25/3/2000"),
+                    InstructorEmail = "erzhuo@ust.edu.ph",
+                    IsTenured = IsTenured.Permanent,
+                    Rank = Rank.AssistantProfessor
+                },
+
+                  new Instructor()
+                  {
+                      InstructorId = 3,
+                      InstructorFirstName = "Leo",
+                      InstructorLastName = "Lintag",
+                      DateHired = DateTime.Parse("25/3/2001"),
+                      InstructorEmail = "Lintag@ust.edu.ph",
+                      IsTenured = IsTenured.Permanent,
+                      Rank = Rank.AssociateProfessor
+                  },
+
+                   new Instructor()
+                   {
+                       InstructorId = 4,
+                       InstructorFirstName = "Beatriz",
+                       InstructorLastName = "Lacsamana",
+                       DateHired = DateTime.Parse("25/4/2002"),
+                       InstructorEmail = "mllacsamana@ust.edu.ph",
+                       IsTenured = IsTenured.Probationary,
+                       Rank = Rank.Professor
+                   }
+
+
+                );
+
         }
     }
 }

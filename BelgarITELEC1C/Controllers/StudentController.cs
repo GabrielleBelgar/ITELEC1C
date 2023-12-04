@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BelgarITELEC1C.Models;
-using BelgarITELEC1C.Services;
+using BelgarITELEC1C.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BelgarITELEC1C.Controllers
 {
@@ -23,17 +24,20 @@ namespace BelgarITELEC1C.Controllers
 
     public class StudentController : Controller
     {
-        private readonly IMyFakeDataService _dummyData;
+        private readonly AppDbContext _dbData;
+        private readonly IWebHostEnvironment _environment;
 
-        public StudentController(IMyFakeDataService dummyData)
+
+        public StudentController(AppDbContext dbData, IWebHostEnvironment environment)
         {
-            _dummyData = dummyData;
+            _dbData = dbData;
+            _environment = environment;
         }
 
-
+        
         public IActionResult Index()
         {
-            return View(_dummyData.StudentList);
+            return View(_dbData.Students);
         }
 
         [HttpGet]
@@ -45,19 +49,63 @@ namespace BelgarITELEC1C.Controllers
         [HttpPost]
         public IActionResult AddStudent(Student newStudent)
         {
-            _dummyData.StudentList.Add(newStudent);
+
+
+            string folder = "students/images/"; //create folder
+            string serverFolder = Path.Combine(_environment.WebRootPath, folder); //concatenate Webrootpath to folder
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + newStudent.UploadedPhoto.FileName;
+            string filePath = Path.Combine(serverFolder, uniqueFileName); //combine the filename to the server
+            using(var fileStream = new FileStream(filePath, FileMode.Create)) //saving the photo in filepath
+            {
+                newStudent.UploadedPhoto.CopyTo(fileStream);
+
+            }
+            newStudent.imagePath = folder + uniqueFileName;
+
+
+
+                /*
+                //if a file/image was uploaded, convert it to byte and save it
+                if (Request.Form.Files.Count > 0) //did a user upload a file?
+                {
+                    var file = Request.Form.Files[0]; //our view will allow one file
+
+                    MemoryStream ms = new MemoryStream();
+                    file.CopyTo(ms); //copy the file into a memory stream object
+                    newStudent.StudentProfilePhoto = ms.ToArray(); //save bytes into newStudent
+
+                    ms.Close();
+                    ms.Dispose();
+                }*/
+
+           
+
+            if (!ModelState.IsValid)
+                return View(new Student());
+
+            _dbData.Students.Add(newStudent);
+            _dbData.SaveChanges();
             return RedirectToAction("Index");
 
         }
         public IActionResult ShowDetails(int id)
         {
+            
+            Student? student = _dbData.Students.FirstOrDefault(st => st.StudentId == id);
 
-            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.StudentId == id);
-
+            
             if (student != null)
+            {
+                /*if(student.StudentProfilePhoto != null)
+                {
+                    string imageBase64Data = Convert.ToBase64String(student.StudentProfilePhoto);
+                    string imageDataURL = string.Format("data:image/jpg;base64, {0}", imageBase64Data);
+                    ViewBag.StudentProfilePhoto = imageDataURL;
+                }*/
+             
                 return View(student);
 
-
+            }
 
             return NotFound();
         }
@@ -65,7 +113,7 @@ namespace BelgarITELEC1C.Controllers
         [HttpGet]
         public IActionResult UpdateStudent(int id)
         {
-            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.StudentId == id);
+            Student? student = _dbData.Students.FirstOrDefault(st => st.StudentId == id);
 
             if (student != null)
                 return View(student);
@@ -79,7 +127,7 @@ namespace BelgarITELEC1C.Controllers
         [HttpPost]
         public IActionResult UpdateStudent(Student studentChanges)
         {
-            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.StudentId == studentChanges.StudentId);
+            Student? student = _dbData.Students.FirstOrDefault(st => st.StudentId == studentChanges.StudentId);
             if (student != null)
             {
                 student.StudentFirstName = studentChanges.StudentFirstName;
@@ -88,6 +136,8 @@ namespace BelgarITELEC1C.Controllers
                 student.StudentCourse = studentChanges.StudentCourse;
                 student.GPA = studentChanges.GPA;
                 student.DateEnrolled = studentChanges.DateEnrolled;
+                _dbData.SaveChanges();
+
 
             }
             return RedirectToAction("Index");
@@ -97,7 +147,7 @@ namespace BelgarITELEC1C.Controllers
         [HttpGet]
         public IActionResult DeleteStudent(int id)
         {
-            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.StudentId == id);
+            Student? student = _dbData.Students.FirstOrDefault(st => st.StudentId == id);
 
             if (student != null)
                 return View(student);
@@ -111,10 +161,12 @@ namespace BelgarITELEC1C.Controllers
         [HttpPost]
         public IActionResult DeleteStudent(Student newStudent)
         {
-            Student? student = _dummyData.StudentList.FirstOrDefault(st => st.StudentId == newStudent.StudentId);
+            Student? student = _dbData.Students.FirstOrDefault(st => st.StudentId == newStudent.StudentId);
 
             if (student != null)
-                _dummyData.StudentList.Remove(student);
+                _dbData.Students.Remove(student);
+                _dbData.SaveChanges();
+
             return RedirectToAction("Index");
         }
 

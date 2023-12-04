@@ -7,6 +7,11 @@
 
 <h1>Instructor Details</h1>
 
+@if(ViewBag.InstructorProfilePhoto != null)
+{
+    <img src = "@ViewBag.InstructorProfilePhoto" width="20%" class="img-thumbnail" alt="profile picture for @Model.InstructorLastName"/>
+}
+
 <table class="table table-info">
     <tr>
         <th>Instructor Id</th>
